@@ -1,16 +1,24 @@
 const express = require("express");
 const app = express();
 
-app.use("/",(req,res)=>{
-    res.send("HELLO WORLD")
+// Handle Auth middleware for all GET,POST,... requests
+
+app.use("/admin",(req,res,next)=>{
+    const token = "xyz";
+    const isAdminAuthorized = token == "xyz";
+    if(!isAdminAuthorized){
+        res.status(401).send("Unauthorized Access!")
+    }else{
+        next();
+    }
 })
-app.use("/test",(req,res)=>{
-    res.send("Hello from the server")
+app.get("/admin/getAllData",(req,res)=>{
+       res.send("All Data Sent")
+    })
+app.get("/admin/deleteUser",(req,res)=>{
+        res.send("User Deleted")
 })
 
-app.use("/hello",(req,res)=>{
-    res.send("Hello Hello HELLO")
-})
 
 app.listen(3000,()=>{
     console.log("Server is Successfully listening on port 3000")
